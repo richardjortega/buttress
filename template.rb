@@ -1,7 +1,7 @@
 # 
 # Setup
 #
-@path = 'https://raw.github.com/GrokInteractive/buttress/files/'
+@path = 'https://raw.github.com/GrokInteractive/buttress/master/files/'
 
 #
 # Create git repo
