@@ -1,7 +1,7 @@
 # 
 # Setup
 #
-@path = '/Users/jasonstraughan/Sites/projects/grok/science/builders/buttress-new/files/'
+@path = 'https://raw/github.com/GrokInteractive/buttress/files/'
 
 #
 # Create git repo
