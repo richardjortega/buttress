@@ -1,0 +1,256 @@
+# 
+# Setup
+#
+@path = '/Users/jasonstraughan/Sites/projects/grok/science/builders/buttress-new/files/'
+
+#
+# Create git repo
+#
+
+git :init
+git add: "."
+git commit: %Q{ -m 'Initial commit' }
+
+#
+# Clean-up
+#
+
+%w{
+  README
+  doc/README_FOR_APP
+  public/index.html
+  app/assets/images/rails.png
+}.each { |file| remove_file file }
+
+git add: "-u ."
+git commit: %Q{ -m 'remove rails default files' }
+
+#
+# .gitignore updates
+#
+
+append_file '.gitignore' do <<-GIT
+.rspec
+capybara-*.html
+.DS_Store
+.rbenv-vars
+.rbenv-version
+.bundle
+db/*.sqlite3
+db/database.yml
+log/*.log
+log/*.pid
+.sass-cache/
+tmp/**/*
+.rvmrc
+.DS_Store
+**/.DS_Store
+GIT
+end
+
+git add: "."
+git commit: %Q{ -m 'updating .gitignore' }
+
+#
+# Gemfile
+#
+
+# Twitter bootstrap baby
+gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+# Incase you want less
+gem 'less-rails'
+# jQuery is the win
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
+# Devise for auth goodness
+gem 'devise'
+# Cancan for permission goodness
+gem 'cancan'
+# Decorator pattern
+gem 'draper'
+# Pagination
+gem 'will_paginate', '~> 3.0'
+
+gem_group :development, :test do
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'capybara'
+  gem 'launchy'
+  gem 'database_cleaner'
+  gem 'guard-rspec'
+  gem 'faker'
+  gem 'thin'
+  gem 'meta_request', '0.2.1'
+  gem 'better_errors'
+end
+
+gem_group :assets do 
+  gem 'therubyracer', :platforms => :ruby
+end
+
+run "bundle install"
+
+git add: "."
+git commit: %Q{ -m 'Gemfile updates' }
+
+#
+# Install Twitter Boostrap
+#
+generate 'bootstrap:install', 'less'
+
+git add: "."
+git commit: %Q{ -m 'Installed Twitter Boostrap' }
+
+#
+# Generate layout for Bootstrap
+#
+if yes?('Use fixed width? (yes == fixed, no == fluid) (yes/no)')
+  generate 'bootstrap:layout', 'application', 'fixed', '--force'
+else
+  generate 'bootstrap:layout', 'application', 'fluid', '--force'
+end
+
+git add: "."
+git commit: %Q{ -m 'Generated Twitter Boostrap layout' }
+
+#
+# Install Devise
+#
+
+generate("devise:install")
+environment "config.action_mailer.default_url_options = { :host => 'localhost:3000' }", env: 'development'
+route('root :to => "home#index"')
+
+# Ensure you have flash messages in app/views/layouts/application.html.erb.
+#      For example:
+# 
+#        <p class="notice"><%= notice %></p>
+#        <p class="alert"><%= alert %></p>
+
+environment "config.assets.initialize_on_precompile = false"
+generate "devise:views"
+
+git add: "."
+git commit: %Q{ -m 'devise gem added' }
+
+#
+# Add User model
+#
+
+# Generate user model
+generate 'devise User'
+
+# Migrate the DB
+rake "db:migrate"
+
+git add: "."
+git commit: %Q{ -m 'User model added' }
+
+#
+# Add CanCan
+#
+
+# CanCan
+generate 'cancan:ability'
+
+git add: "."
+git commit: %Q{ -m 'CanCan abilty model added' }
+
+#
+# Add email 
+#
+
+# Mail Settings
+inject_into_file 'config/environments/development.rb', :after => 'config.assets.debug = true' do <<-RUBY
+
+  #Mail Settings
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+      :address              => "smtp.gmail.com",
+      :port                 => 587,
+      :domain               => 'gmail.com',
+      :user_name            => 'rubyonrailsrailsmailtest@gmail.com',
+      :password             => 'secret',
+      :authentication       => 'plain',
+      :enable_starttls_auto => true
+  }
+RUBY
+end
+
+inject_into_file 'config/environments/production.rb', :after => 'config.active_support.deprecation = :notify' do <<-RUBY
+
+  #Mail Settings
+  config.action_mailer.default_url_options = { :host => 'www.example.com' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+      :address              => "smtp.gmail.com",
+      :port                 => 587,
+      :domain               => 'gmail.com',
+      :user_name            => 'user@gmail.com',
+      :password             => 'secret',
+      :authentication       => 'plain',
+      :enable_starttls_auto => true
+  }
+
+RUBY
+end
+
+git add: "."
+git commit: %Q{ -m 'gmail added as mailer' }
+
+#
+# Replace Application Controller
+#
+
+get @path + 'app/controllers/application_controller.rb', 'app/controllers/application_controller.rb'
+
+git add: "."
+git commit: %Q{ -m 'Updated application controller' }
+
+#
+# Add Home Controller
+#
+
+# Generate Home Controller
+generate :controller, 'Home', 'index'
+
+git add: "."
+git commit: %Q{ -m 'Generate home controller' }
+
+#
+# Add Admin Controller
+#
+
+# Add base admin controller
+get @path + 'app/controllers/admin_controller.rb', 'app/controllers/admin_controller.rb'
+
+git add: "."
+git commit: %Q{ -m 'Add base admin controller' }
+
+#
+# Add admin/users section
+#
+
+# Add admin users controller
+get @path + 'app/controllers/admin/users_controller.rb', 'app/controllers/admin/users_controller.rb'
+# Add admin users views
+get @path + 'app/views/admin/index.html.erb', 'app/views/admin/index.html.erb'
+get @path + 'app/views/admin/users/_form.html.erb', 'app/views/admin/users/_form.html.erb'
+get @path + 'app/views/admin/users/index.html.erb', 'app/views/admin/users/index.html.erb'
+get @path + 'app/views/admin/users/edit.html.erb', 'app/views/admin/users/edit.html.erb'
+get @path + 'app/views/admin/users/new.html.erb', 'app/views/admin/users/new.html.erb'
+get @path + 'app/views/admin/users/show.html.erb', 'app/views/admin/users/show.html.erb'
+
+# Add route
+route <<-ROUTE
+  resources :admin, :only => [ :index ]
+  namespace :admin do
+    resources :users
+  end
+ROUTE
+
+
+git add: "."
+git commit: %Q{ -m 'Generate admin users area' }
