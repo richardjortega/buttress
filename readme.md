@@ -5,7 +5,7 @@ Generate a basic rails SaaS setup in one line.
 ## Basic Usage
 
 ```
-    rails new APP_NAME --database=postgresql -m https://raw/github.com/GrokInteractive/buttress/files/
+rails new APP_NAME --database=postgresql -m https://raw.github.com/GrokInteractive/buttress/master/template.rb
 ```
 
 ## License
