@@ -2,6 +2,12 @@
 # Setup
 #
 @path = 'https://raw.github.com/GrokInteractive/buttress/master/files/'
+# @path = File.expand_path(File.dirname(__FILE__)) + '/files/'
+
+#
+# Gather Info
+#
+fixed_width = yes? 'Use fixed width? (yes == fixed, no == fluid) (yes/no)'
 
 #
 # Create git repo
@@ -82,7 +88,18 @@ gem_group :development, :test do
   gem 'faker'
   gem 'thin'
   gem 'meta_request', '0.2.1'
+  # 10x better error display
   gem 'better_errors'
+  # Finds security issues
+  gem 'brakeman', :require => false
+  # Annotates models with table info
+  gem 'annotate'
+  # Removes asset log from dev log
+  gem 'quiet_assets'
+  # Displays footnotes in your application for easy debugging
+  # such as sessions, request parameters, cookies, filter chain, routes, queries, etc.
+  gem 'rails-footnotes', '>= 3.7.9'
+  
 end
 
 gem_group :assets do 
@@ -105,7 +122,7 @@ git commit: %Q{ -m 'Installed Twitter Boostrap' }
 #
 # Generate layout for Bootstrap
 #
-if yes?('Use fixed width? (yes == fixed, no == fluid) (yes/no)')
+if fixed_width
   generate 'bootstrap:layout', 'application', 'fixed', '--force'
 else
   generate 'bootstrap:layout', 'application', 'fluid', '--force'
