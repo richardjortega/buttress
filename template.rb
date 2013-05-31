@@ -72,6 +72,8 @@ gem 'jquery-ui-rails'
 gem 'devise'
 # Cancan for permission goodness
 gem 'cancan'
+# Rolify for roles
+gem 'rolify'
 # Decorator pattern
 gem 'draper'
 # Pagination
@@ -175,6 +177,20 @@ git add: "."
 git commit: %Q{ -m 'CanCan abilty model added' }
 
 #
+# Add Rolify
+#
+
+# CanCan
+generate 'rolify:role'
+
+# Migrate the DB
+rake "db:migrate"
+
+git add: "."
+git commit: %Q{ -m 'CanCan abilty model added' }
+
+
+#
 # Add email 
 #
 
@@ -271,3 +287,15 @@ ROUTE
 
 git add: "."
 git commit: %Q{ -m 'Generate admin users area' }
+
+#
+# Seed the DB
+# 
+
+get @path + 'db/seeds.rb', 'db/seeds.rb'
+
+# Seed the DB
+rake "db:seed"
+
+git add: "."
+git commit: %Q{ -m 'DB seeded' }
