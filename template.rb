@@ -1,13 +1,18 @@
 # 
 # Setup
 #
-@path = 'https://raw.github.com/GrokInteractive/buttress/master/files/'
-# @path = File.expand_path(File.dirname(__FILE__)) + '/files/'
+# @path = 'https://raw.github.com/GrokInteractive/buttress/master/files/'
+@path = File.expand_path(File.dirname(__FILE__)) + '/files/'
 
 #
 # Gather Info
 #
-fixed_width = yes? 'Use fixed width? (yes == fixed, no == fluid) (yes/no)'
+fixed_width = yes? 'Use fixed width? (yes == fixed, no == fluid)'
+
+db_name = ask("DB name?")
+db_username = ask("DB username?")
+db_password = ask("DB password?")
+drop_db = yes? "Drop DB #{db_name} if exists? (yes/no)"
 
 #
 # Create git repo
@@ -58,9 +63,23 @@ git add: "."
 git commit: %Q{ -m 'updating .gitignore' }
 
 #
+# Add database.yml
+#
+get @path + 'config/database.yml', 'config/database.yml'
+gsub_file 'config/database.yml', /DATABASE_HERE/, db_name
+gsub_file 'config/database.yml', /USERNAME_HERE/, db_username
+gsub_file 'config/database.yml', /PASSWORD_HERE/, db_password
+
+git add: "."
+git commit: %Q{ -m 'setup database.yml' }
+
+
+#
 # Gemfile
 #
 
+gem 'pg'
+gem 'pg_search'
 # Twitter bootstrap baby
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 # Incase you want less
@@ -101,7 +120,6 @@ gem_group :development, :test do
   # Displays footnotes in your application for easy debugging
   # such as sessions, request parameters, cookies, filter chain, routes, queries, etc.
   gem 'rails-footnotes', '>= 3.7.9'
-  
 end
 
 gem_group :assets do 
@@ -112,6 +130,18 @@ run "bundle install"
 
 git add: "."
 git commit: %Q{ -m 'Gemfile updates' }
+
+
+#
+# Setup DB
+#
+if drop_db
+  rake "db:drop"
+end
+rake "db:create"
+
+git add: "."
+git commit: %Q{ -m 'Raked DB - added schema' }
 
 #
 # Install Twitter Boostrap
@@ -174,7 +204,15 @@ git commit: %Q{ -m 'User model added' }
 generate 'cancan:ability'
 
 git add: "."
-git commit: %Q{ -m 'CanCan abilty model added' }
+git commit: %Q{ -m 'CanCan ability model added' }
+
+#
+# Update Ability.rb model
+#
+get @path + 'app/models/ability.rb', 'app/models/ability.rb'
+
+git add: "."
+git commit: %Q{ -m 'Update ability.rb' }
 
 #
 # Add Rolify
@@ -187,7 +225,7 @@ generate 'rolify:role'
 rake "db:migrate"
 
 git add: "."
-git commit: %Q{ -m 'CanCan abilty model added' }
+git commit: %Q{ -m 'Rolify added' }
 
 
 #
@@ -298,4 +336,4 @@ get @path + 'db/seeds.rb', 'db/seeds.rb'
 rake "db:seed"
 
 git add: "."
-git commit: %Q{ -m 'DB seeded' }
+git commit: %Q{ -m 'DB seed file added' }
