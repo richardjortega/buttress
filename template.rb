@@ -1,9 +1,9 @@
 # 
 # Setup
 #
-begin
+if File.expand_path(File.dirname(__FILE__)).split('/').last == 'buttress'
   @path = File.expand_path(File.dirname(__FILE__)) + '/files/' 
-rescue 
+else
   @path = 'https://raw.github.com/GrokInteractive/buttress/master/files/'
 end
 
