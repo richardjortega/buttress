@@ -1,8 +1,9 @@
 # 
 # Setup
 #
-# @path = 'https://raw.github.com/GrokInteractive/buttress/master/files/'
-@path = File.expand_path(File.dirname(__FILE__)) + '/files/'
+@path = File.expand_path(File.dirname(__FILE__)) + '/files/' rescue 'https://raw.github.com/GrokInteractive/buttress/master/files/'
+
+puts "PATH IS #{@path}"
 
 #
 # Gather Info
@@ -13,6 +14,7 @@ db_name = ask("DB name?")
 db_username = ask("DB username?")
 db_password = ask("DB password?")
 drop_db = yes? "Drop DB #{db_name} if exists? (yes/no)"
+populate_db = yes? "Populate database with dummy data? (yes/no)"
 
 #
 # Create git repo
@@ -337,3 +339,10 @@ rake "db:seed"
 
 git add: "."
 git commit: %Q{ -m 'DB seed file added' }
+
+#
+# Setup DB
+#
+if populate_db
+  rake "db:populate"
+end
