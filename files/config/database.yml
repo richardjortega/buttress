@@ -1,0 +1,20 @@
+development:
+  adapter: postgresql
+  database: DATABASE_HERE_dev
+  username: USERNAME_HERE
+  password: PASSWORD_HERE
+  host: localhost
+
+test:
+  adapter: postgresql
+  database: DATABASE_HERE_test
+  username: USERNAME_HERE
+  password: PASSWORD_HERE
+  host: localhost
+
+production:
+  adapter: postgresql
+  database: DATABASE_HERE_live
+  username: USERNAME_HERE
+  password: PASSWORD_HERE
+  host: localhost
