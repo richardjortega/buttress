@@ -1,9 +1,7 @@
 class AdminController < ApplicationController
+  load_and_authorize_resource
   protect_from_forgery
-
-  before_filter :authenticate_admin!
-
-  # layout 'administration'
+  resourcify
 
   def index
   end
