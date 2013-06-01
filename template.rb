@@ -1,8 +1,11 @@
 # 
 # Setup
 #
-@path = File.expand_path(File.dirname(__FILE__)) + '/files/' 
-  rescue @path = 'https://raw.github.com/GrokInteractive/buttress/master/files/'
+begin
+  @path = File.expand_path(File.dirname(__FILE__)) + '/files/' 
+rescue 
+  @path = 'https://raw.github.com/GrokInteractive/buttress/master/files/'
+end
 
 puts "PATH IS #{@path}"
 
