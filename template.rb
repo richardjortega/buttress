@@ -7,8 +7,6 @@ else
   @path = 'https://raw.github.com/GrokInteractive/buttress/master/files/'
 end
 
-puts "PATH IS #{@path}"
-
 #
 # Gather Info
 #
@@ -345,8 +343,14 @@ git add: "."
 git commit: %Q{ -m 'DB seed file added' }
 
 #
-# Setup DB
+# Populate DB / populate rake task
 #
+get @path + 'lib/tasks/populate.rake', 'lib/tasks/populate.rake'
+
 if populate_db
+get @path + 'app/controllers/admin_controller.rb', 'app/controllers/admin_controller.rb'
   rake "db:populate"
 end
+
+git add: "."
+git commit: %Q{ -m 'Added populate db rake task' }
