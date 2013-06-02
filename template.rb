@@ -201,6 +201,25 @@ git add: "."
 git commit: %Q{ -m 'User model added' }
 
 #
+# Add first and last name to user table
+#
+generate :migration, "AddNamesToUsers first_name:string last_name:string"
+
+# Migrate the DB
+rake "db:migrate"
+
+git add: "."
+git commit: %Q{ -m 'Added first and last name to user table via migration' }
+
+#
+# Add search method to User model
+#
+get @path + 'app/models/user.rb', 'app/models/user.rb'
+
+git add: "."
+git commit: %Q{ -m 'Update user model to include search method' }
+
+#
 # Add CanCan
 #
 
@@ -231,6 +250,13 @@ rake "db:migrate"
 git add: "."
 git commit: %Q{ -m 'Rolify added' }
 
+#
+# Add User decorator
+#
+get @path + 'app/decorators/user_decorator.rb', 'app/decorators/user_decorator.rb'
+
+git add: "."
+git commit: %Q{ -m 'Added user decorator with full_name method' }
 
 #
 # Add email 
