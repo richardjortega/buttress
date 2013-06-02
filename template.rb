@@ -101,6 +101,10 @@ gem 'rolify'
 gem 'draper'
 # Pagination
 gem 'will_paginate', '~> 3.0'
+# For better CLI printing
+gem 'hirb'
+# This gem logs email sent by a Rails application to a database table.
+gem "mailbag"
 
 gem_group :development, :test do
   gem 'factory_girl_rails'
