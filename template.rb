@@ -255,6 +255,14 @@ git add: "."
 git commit: %Q{ -m 'Rolify added' }
 
 #
+# Update Application Helper
+#
+get @path + 'app/helpers/application_helper.rb', 'app/helpers/application_helper.rb'
+
+git add: "."
+git commit: %Q{ -m 'Application helper with sortable method' }
+
+#
 # Add User decorator
 #
 get @path + 'app/decorators/user_decorator.rb', 'app/decorators/user_decorator.rb'
