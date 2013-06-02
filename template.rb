@@ -271,6 +271,14 @@ git add: "."
 git commit: %Q{ -m 'Rolify added' }
 
 #
+# Add user model spec
+#
+get @path + 'spec/models/user_spec.rb', 'spec/models/user_spec.rb'
+
+git add: "."
+git commit: %Q{ -m 'Added user model spec' }
+
+#
 # Update Application Helper
 #
 get @path + 'app/helpers/application_helper.rb', 'app/helpers/application_helper.rb'
