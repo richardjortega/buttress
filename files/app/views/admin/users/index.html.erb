@@ -24,9 +24,9 @@
         <tbody>
           <% @users.each do |user| %>
             <tr>
-              <td><%= link_to user.full_name, admin_user_path(user) %></td>
+              <td><%= link_to user.decorate.full_name, admin_user_path(user) %></td>
               <td><%= user.email %></td>
-              <td><%= user.is_admin ? 'Yes' : 'No' %></td>
+              <td><%= user.has_role?(:admin) ? 'Yes' : 'No' %></td>
               <td><%= user.created_at.strftime("%d %b. %Y") %></td>
               <td class='span2 center'>
                 <%= link_to t('.edit', :default => t("helpers.links.edit")),
