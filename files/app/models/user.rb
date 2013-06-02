@@ -8,7 +8,11 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
-  # attr_accessible :title, :body
+
+  # Some basic validation of name properties
+  validates_presence_of :first_name, :last_name, :email
+  validates_length_of :first_name, :maximum => 50
+  validates_length_of :last_name, :maximum => 50
   
   # Simple search method
   def self.search(query)
