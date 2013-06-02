@@ -414,5 +414,16 @@ git commit: %Q{ -m 'Added populate db rake task' }
 #
 rake 'spec'
 
+#
+# Show final instructions
+#
+puts "\n\n*********************************\n"
+puts "*** BUTTRESS INSTALL COMPLETE ***\n"
+puts "*********************************\n\n"
+puts "Admin Username: admin@example.org\n"
+puts "Admin Password: letmein123\n\n"
+puts "Visit https://github.com/GrokInteractive/buttress to learn more.\n\n"
+puts "*********************************\n\n"
+
 # Suppress final bundle install as is unneeded
 def run_bundle ; end
