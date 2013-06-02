@@ -139,7 +139,6 @@ run "bundle install"
 git add: "."
 git commit: %Q{ -m 'Gemfile updates' }
 
-
 #
 # Setup DB
 #
@@ -150,6 +149,15 @@ rake "db:create"
 
 git add: "."
 git commit: %Q{ -m 'Raked DB - added schema' }
+
+#
+# Add spec_helper
+#
+get @path + 'spec/spec_helper.rb', 'spec/spec_helper.rb'
+
+
+git add: "."
+git commit: %Q{ -m 'Add basic spec_helper.rb' }
 
 #
 # Install Twitter Boostrap
@@ -222,6 +230,14 @@ get @path + 'app/models/user.rb', 'app/models/user.rb'
 
 git add: "."
 git commit: %Q{ -m 'Update user model to include search method' }
+
+#
+# Add user factory
+#
+get @path + 'spec/factories/users.rb', 'spec/factories/users.rb'
+
+git add: "."
+git commit: %Q{ -m 'Added user factory' }
 
 #
 # Add CanCan
@@ -392,3 +408,11 @@ end
 
 git add: "."
 git commit: %Q{ -m 'Added populate db rake task' }
+
+#
+# Run spec tests
+#
+rake 'spec'
+
+# Suppress final bundle install as is unneeded
+def run_bundle ; end
